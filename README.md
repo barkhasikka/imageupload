@@ -1,5 +1,8 @@
 # imageupload
 
+´´I later realise the requirement of proper commit history. Considering that I have been working on this task locally I have tried to divide it into commits but not usually how I go about commiting. You will see all the commits on one date cos of that reason.´´
+
+
 Create a service for storing and retrieving image data. The service should follow best practices of a web service, examples:
 
 * data validation
