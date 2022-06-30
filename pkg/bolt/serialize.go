@@ -1,8 +1,6 @@
 package bolthelper
 
 import (
-	"time"
-
 	"imageupload/pkg/utils/conversion"
 
 	"github.com/boltdb/bolt"
@@ -30,17 +28,4 @@ func DBSerializeUint64(bucket *bolt.Bucket, key string, value uint64) {
 func DBSerializeInt(bucket *bolt.Bucket, key string, value int) {
 	valueByte := conversion.Itob(int(value))
 	bucket.Put([]byte(key), valueByte)
-}
-
-func DBSerializeUTCTime(bucket *bolt.Bucket, key string, time time.Time) {
-	timeInString := conversion.GetTimeStringInUTC(time)
-	DBSerializeString(bucket, key, timeInString)
-}
-
-func DBSerializeFloat64(bucket *bolt.Bucket, key string, value float64) {
-	bucket.Put([]byte(key), conversion.Float64ToByte(value))
-}
-
-func DBSerializeFloat32(bucket *bolt.Bucket, key string, value float32) {
-	bucket.Put([]byte(key), conversion.Float32ToByte(value))
 }

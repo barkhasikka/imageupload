@@ -26,14 +26,6 @@ func DBDeSerializeUint64(bucket *bolt.Bucket, key string) uint64 {
 	return conversion.Btoi64(bucket.Get([]byte(key)))
 }
 
-func DBDeSerializeFloat64(bucket *bolt.Bucket, key string) float64 {
-	return conversion.ByteToFloat64(bucket.Get([]byte(key)))
-}
-
-func DBDeSerializeFloat32(bucket *bolt.Bucket, key string) float32 {
-	return conversion.ByteToFloat32(bucket.Get([]byte(key)))
-}
-
 func DBDeSerializeUint(bucket *bolt.Bucket, key string) uint {
 	return uint(conversion.B16toi(bucket.Get([]byte(key))))
 }

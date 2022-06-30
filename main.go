@@ -4,7 +4,11 @@ import (
 	"context"
 	"fmt"
 	"imageupload/config"
+	apihandlers "imageupload/internal/apihandlers"
+	imageservice "imageupload/internal/image"
+	imagerepository "imageupload/internal/image/repository"
 	"imageupload/pkg/utils/files"
+	"log"
 	"net/http"
 	"os"
 	"os/signal"
@@ -22,12 +26,32 @@ const (
 	serverWriteTimeout = 10 * time.Second
 )
 
+func initImageHandler(ctx context.Context) (*imageservice.Handler, error) {
+	imageRepo, err := imagerepository.NewBoltRepository(config.LocalMemPath)
+	if err != nil {
+		return nil, err
+	}
+
+	imageService := imageservice.NewService(imageRepo)
+
+	return imageservice.NewHandlers(imageService), nil
+}
+
 func main() {
 	ctx, cancelFunc := context.WithCancel(context.Background())
 	files.CreateDir(config.LocalMemPath)
 	files.CreateDir(config.LocalImagesDirectory)
 
+	imageHandlers, err := initImageHandler(ctx)
+	if err != nil {
+		log.Fatalf("Error initialising image service %v", err)
+	}
+	api := apihandlers.Api{
+		ImageHandlers: imageHandlers,
+	}
+
 	r := gin.New()
+	api.CreateRoutes(r)
 	r.Static("/home", "./public")
 	http.Handle("/", r)
 	termChan := make(chan os.Signal, 1)

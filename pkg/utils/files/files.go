@@ -1,7 +1,9 @@
 package files
 
 import (
+	"io"
 	"log"
+	"mime/multipart"
 	"os"
 )
 
@@ -14,4 +16,10 @@ func CreateDir(dir string) error {
 		}
 	}
 	return nil
+}
+
+func SaveUploadedFile(file multipart.File, out *os.File) error {
+
+	_, err := io.Copy(out, file)
+	return err
 }
